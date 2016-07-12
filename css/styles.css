@@ -1,0 +1,274 @@
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
+@import url("//cityofphiladelphia.github.io/patterns/dist/1.2.1/css/patterns.css");
+
+body {
+  /*fixes a random medium screen issue,
+  investigate further */
+  overflow-x:hidden;
+}
+
+.search {
+  z-index:32;
+}
+.search-head .small-text {
+  margin-top: -20px;
+}
+.search-head {
+  margin-top:0;
+}
+.search-head h1 {
+  margin-top:.5rem;
+}
+.caps {
+  text-transform: uppercase;
+}
+.bold{
+  font-weight: bold;
+}
+.map-container {
+  width:100%;
+}
+.map {
+  height: 200px;
+}
+.map-explainer p {
+  line-height: 1.2;
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+.front {
+  margin-top: 1.6rem;
+}
+.panel h4{
+  color:#666;
+  margin-bottom: 0;
+}
+
+.search-head .small-text {
+  margin-top: -20px;
+}
+.search-head h1 {
+  margin-top:.5rem;
+}
+.search-box-wide {
+  margin: 0 auto;
+  float:none;
+}
+.search-select {
+  display: inline-block;
+  position: relative;
+
+  width: 38%;
+  height: 2.85714rem;
+  padding: 0.5rem 0 0.5rem 0.5rem;
+  border: 1px solid #f2c612;
+  border-width: 1px 0px 1px 1px;
+  background: #fff;
+
+  font-size: 1.15rem;
+  cursor: pointer;
+}
+.search-form-container {
+  width: 62%;
+}
+.search-select .fa {
+  position: absolute;
+  right: 0.25rem;
+  margin: 0.25rem;
+}
+.search-select-options {
+  border: 1px solid #f2c612;
+  border-width: 0px 1px 1px 1px;
+  background: #ffffff;
+  padding: 0;
+
+  position: absolute;
+  left: 0;
+  top: 2.85714rem;
+  min-width: 250px;
+}
+.search-select-options li {
+  height: 2.85714rem;
+  padding: 0.5rem 1rem;
+
+  border-bottom: 1px solid #f7f7f7;
+  cursor: pointer;
+}
+.search-select-options li:last-child {
+  border-bottom-width: 0;
+}
+.search-select-options li:hover {
+  background: #dbe1e3;
+}
+.search-select-options label {
+  color: #2176d2;
+  font-weight: bold;
+  width: 125px;
+  display: inline-block;
+  cursor: pointer;
+}
+.search-select-options li:hover label,
+.search-select-options li:hover small {
+  color: #ffffff;
+}
+.search-select-options small {
+  color: #9299A5;
+  font-style: italic;
+}
+.search-select-close{
+  width:100%;
+  height:100%;
+  position: fixed;
+  bottom: 0;
+  left:0;
+  z-index:31;
+}
+.search .field-lg {
+  width: 65%;
+}
+.search .field-md {
+  width: 50%;
+}
+.search .field-sm {
+  width: 35%;
+}
+.search input[type="text"] {
+  border-width: 1px 0px 1px 1px;
+}
+
+.result-row {
+  cursor: pointer;
+}
+.results-view{
+  background: #dbe1e3;
+  margin-top: -16px;
+}
+.results i {
+  color:#027EA4;
+}
+.results tr td:first-child{
+  font-size:.8rem;
+}
+.results tr:hover, .results tr:hover a{
+  background:#dbe1e3;
+  color:#000;
+}
+
+.owners {
+    line-height:1;
+}
+.owners div {
+  margin-bottom:1rem;
+}
+
+.button {
+  width: 100%;
+}
+
+@media only screen and (max-width: 40em) {
+  .front .callout {
+    margin:0.625rem 0 1rem 0;
+  }
+  .intro .fa-stack{
+    display:none;
+  }
+}
+
+@media only screen and (min-width: 40.0625em) {
+  .search-select {
+    padding: 0.5rem 0.5rem 0.5rem 1rem;
+  }
+
+  .search-box.medium-16 .search-select {
+    width: 32%;
+  }
+  .search-box.medium-16 .search-form-container {
+    width: 68%;
+  }
+
+  .search-box.medium-10 .search-select {
+    width: 40%;
+    padding-left: 0.5rem;
+  }
+  .search-box.medium-10 .search-form-container {
+    width: 60%;
+  }
+}
+
+@media only screen and (min-width: 64.0625em) {
+  .search-box.medium-16 .search-select {
+    width: 22%;
+  }
+  .search-box.medium-16 .search-form-container {
+    width: 73%;
+  }
+
+  .search-box.medium-10 .search-select {
+    width: 30%;
+  }
+  .search-box.medium-10 .search-form-container {
+    width: 70%;
+  }
+}
+
+/* print-specific*/
+@media print {
+  body {
+   font-size: 80%;
+  }
+  .property-side,
+  .property-main,
+  .tablesaw {
+    width:100% !important;
+  }
+  .medium-12{
+    width:50%;
+  }
+  /*stop blank page at end */
+  body, html, #application { height: 100%; }
+
+  #alpha-alert, header, nav, footer, .feedback, .button, .button + .small-text, .search, .map-container, #breadcrumbs, .search-box, .divider, .search-right, .zoning-link{
+    display:none !important;
+  }
+
+  /*tablesaw-specific overrides */
+  .tablesaw-stack td .tablesaw-cell-label,
+  .tablesaw-stack th .tablesaw-cell-label{
+    display:none !important;
+  }
+  .tablesaw-stack thead td, .tablesaw-stack thead th,
+  .tablesaw-stack td, .tablesaw-stack th {
+    display: table-cell !important;
+  }
+  .tablesaw-stack tbody td, .tablesaw-stack tbody th{
+    float: none !important;
+    width: auto !important;
+  }
+  /*to fit more on the page*/
+  .xtra-lg, .h3{
+    font-size:1em;
+  }
+  .search-head {
+    padding: 0px !important;
+    margin: 0px !important;
+  }
+  .panel {
+    padding:10px;
+  }
+  .panel h4, .panel h4 + div, .sales h3, .sales h3 + div {
+    display:inline;
+  }
+  .panel h4:after, .sales h3:after{
+    content: ": ";
+  }
+  .panel h4 + div::after, .sales h3 + div::after{
+    content:"";
+    display:block;
+  }
+  a[href]:after {
+    content: none !important;
+  }
+  .stat {
+    font-size: 1rem;
+  }
+}
