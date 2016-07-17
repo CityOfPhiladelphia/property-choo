@@ -13,7 +13,8 @@ app.model(require('./models/property'))
 
 app.router((route) => [
   route('/', layout()),
-  route('/address/:address', layout(pages.results)),
+  route('/address/:input', layout(pages.results('address'))),
+  route('/block/:input', layout(pages.results('block'))),
   route('/account/:account', layout(pages.property))
 ])
 

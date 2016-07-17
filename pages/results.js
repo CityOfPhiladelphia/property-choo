@@ -1,31 +1,32 @@
 const html = require('choo/html')
 
-module.exports = (state, prev, send) => {
-  const address = state.params.address
+module.exports = (queryType) => (state, prev, send) => {
+  const query = { type: queryType, input: state.params.input }
 
-  if (address && state.results.query !== address) {
-    send('results:fetch', {address})
+  if (query.input && !isSameQuery(query, state.results.query)) {
+    query.reset = true
+    send('results:fetch', query)
   }
 
   let display
   if (state.results.isLoading) {
     display = 'Loading...'
-  } else if (state.results.ais.features.length > 0) {
-    display = resultsTable(state.results.ais.features, state.results.opa)
+  } else if (state.results.matches.features.length > 0) {
+    display = resultsTable(state.results.matches.features)
   } else {
     display = '0 properties found'
   }
 
   return html`
     <div>
-      <h1>${address}</h1>
+      <h1>${query.input}</h1>
       ${display}
-      ${state.results.ais.total_size > state.results.ais.features.length
-        ? seeMoreButton(address, state.results.ais.page + 1)
+      ${state.results.matches.total_size > state.results.matches.features.length
+        ? html`<div><a href="#" class="button icon" onclick=${onClickMore}>See more results</a></div>`
         : ''}
     </div>`
 
-  function resultsTable (aisRows, opaHash) {
+  function resultsTable (features) {
     return html`
       <table role="grid" summary="Property search results" class="tablesaw tablesaw-stack results no-borders" data-tablesaw-mode="stack">
         <thead>
@@ -37,33 +38,37 @@ module.exports = (state, prev, send) => {
           </tr>
         </thead>
         <tbody>
-          ${aisRows.map((row) => {
-            const opa = opaHash[row.properties.opa_account_num] || {}
+          ${features.map((feature) => {
+            const props = feature.properties
             return html`
-              <tr class="result-row" onclick=${() => window.location.hash = '/account/' + row.properties.opa_account_num}>
-                <td>${row.properties.opa_address}</td>
-                <td>${opa.market_value}</td>
-                <td>${formatDate(opa.sale_date)}, $${opa.sale_price}</td>
-                <td>${row.properties.opa_owners ? row.properties.opa_owners.join(', ') : ''}</td>
+              <tr class="result-row" onclick=${() => navigate(props.opa_account_num)}>
+                <td>${props.opa_address}</td>
+                <td>${props.market_value}</td>
+                <td>${formatDate(props.sale_date)}, $${props.sale_price}</td>
+                <td>${props.opa_owners ? props.opa_owners.join(', ') : ''}</td>
               </tr>`
           })}
         </tbody>
       </table>`
   }
 
-  function seeMoreButton (address, page) {
-    const payload = {address, page}
-    return html`
-      <div>
-        <a class="button icon" onclick=${(e) => send('results:fetch', payload)}>
-          See more results
-        </a>
-      </div>`
+  function onClickMore (e) {
+    query.page = state.results.matches.page + 1
+    send('results:fetch', query)
+    e.preventDefault()
   }
 
-  function formatDate (iso) {
-    if (!iso) return
-    const [year, month, day] = iso.split('T')[0].split('-')
-    return `${+month}/${+day}/${year}`
+  function navigate (accountNum) {
+    window.location.hash = '/account/' + accountNum
   }
+}
+
+function isSameQuery (a, b) {
+  return a.type === b.type && a.input === b.input
+}
+
+function formatDate (iso) {
+  if (!iso) return
+  const [year, month, day] = iso.split('T')[0].split('-')
+  return `${+month}/${+day}/${year}`
 }

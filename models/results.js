@@ -2,7 +2,6 @@ const http = require('choo/http')
 const qs = require('query-string')
 const waterfall = require('run-waterfall')
 const keyBy = require('lodash/keyby')
-const map = require('lodash/map')
 const extend = require('xtend')
 
 const config = require('../config')
@@ -10,7 +9,7 @@ const config = require('../config')
 module.exports = {
   namespace: 'results',
   state: {
-    ais: {
+    matches: {
       features: [],
       normalized: [],
       page: 0,
@@ -18,75 +17,97 @@ module.exports = {
       page_size: 0,
       total_size: 0
     },
-    opa: {},
-    query: null, // NOT the property returned by AIS, but an internal property
+    query: { // NOT the property returned by AIS, but an internal property
+      type: null,
+      input: null
+    },
     isLoading: false
   },
   reducers: {
     receivePage: (data, state) => {
-      const combinedFeatures = state.ais.features.concat(data.ais.features)
-      const newAIS = extend(data.ais, { features: combinedFeatures })
-      const newOPA = extend(state.opa, data.opa)
-      return ({ ais: newAIS, opa: newOPA, isLoading: false })
+      const { matches, details } = data
+      const matchesCopy = extend(matches, {}) // to avoid mutation
+      const detailedFeatures = mergeDetails(matchesCopy.features, details)
+
+      // Append to current state's features (support pagination)
+      // for new queries, still works because current state's features is []
+      matchesCopy.features = state.matches.features.concat(detailedFeatures)
+
+      return { matches: matchesCopy, isLoading: false }
     },
-    setQuery: (data, state) => {
-      const emptyAIS = module.exports.state.ais
-      return ({ query: data.address, ais: emptyAIS, opa: {}, isLoading: true })
+    resetQuery: (data, state) => {
+      const emptyMatches = module.exports.state.matches
+      return ({ query: data, matches: emptyMatches, isLoading: true })
     }
   },
   effects: {
     fetch: (data, state, send, done) => {
-      const operations = [
-        (callback) => send('results:fetchAIS', data, callback),
-        (aisData, callback) => send('results:fetchOPA', aisData, callback)
-      ]
+      const operations = []
+
       // If new query, first operation should be to reset state
-      if (data.address !== state.query) {
-        operations.unshift((callback) => send('results:setQuery', data, callback))
-      }
-      // Execute each function sequentially, passing result into next function
+      if (data.reset) operations.push((callback) => send('results:resetQuery', data, callback))
+
+      operations.push(
+        (callback) => send('results:fetchMatches', data, callback),
+        (matches, callback) => send('results:fetchDetails', matches, callback)
+      )
+
+      // Execute each operation sequentially, passing result into next function
       waterfall(operations, function waterfallDone (err, results) {
         if (err) console.error(err)
-        // results consists of 2 properties, { ais, opa }
+        // results consists of 2 properties, { matches, details }
         send('results:receivePage', results, done)
       })
     },
-    fetchAIS: (data, state, send, done) => {
-      const params = {
-        gatekeeperKey: config.aisKey,
-        include_units: null,
-        opa_only: null
-      }
-      if (data.page) params.page = data.page
-      const address = encodeURIComponent(data.address)
-      const url = `${config.aisBase}addresses/${address}?${qs.stringify(params)}`
+    fetchMatches: (data, state, send, done) => {
+      const url = constructMatchesURL(data.type, data.input, data.page)
       http(url, { json: true }, (err, response) => {
         if (err) done(err)
         else done(null, response.body)
       })
     },
-    fetchOPA: (aisData, state, send, done) => {
-      const accountNumbers = aisData.features.map((feature) => feature.properties.opa_account_num)
-      const params = {
-        $select: [
-          'parcel_number',
-          'market_value',
-          'sale_date',
-          'sale_price'
-        ].join(','),
-        $where: `parcel_number in ("${accountNumbers.join('","')}")`
-      }
-      const url = `${config.opaBase}?${qs.stringify(params)}`
+    fetchDetails: (matches, state, send, done) => {
+      const accountNumbers = matches.features.map((feature) => feature.properties.opa_account_num)
+      const url = constructDetailsURL(accountNumbers)
       http(url, { json: true }, (err, response) => {
         if (err) done(err)
-        else if (response.body.length < 1) done(`No opa data found for ${aisData.length} accounts`)
-        else {
-          // Convert OPA array to object keyed by parcel_number for easier access
-          // while iterating ais results. Could merge datasets here but not necessary.
-          const opaHash = keyBy(response.body, 'parcel_number')
-          done(null, { ais: aisData, opa: opaHash })
-        }
+        else if (response.body.length < 1) done('No details found')
+        else done(null, { matches: matches, details: response.body })
       })
     }
   }
+}
+
+function constructMatchesURL (type, input, page) {
+  const params = {
+    gatekeeperKey: config.aisKey,
+    include_units: null,
+    opa_only: null
+  }
+  if (page) params.page = page
+  const resource = type === 'address' ? 'addresses' : type
+  const cleanInput = encodeURIComponent(input)
+  return `${config.aisBase}${resource}/${cleanInput}?${qs.stringify(params)}`
+}
+
+function constructDetailsURL (accountNumbers) {
+  const params = {
+    $select: [
+      'parcel_number',
+      'market_value',
+      'sale_date',
+      'sale_price'
+    ].join(','),
+    $where: `parcel_number in ("${accountNumbers.join('","')}")`
+  }
+  return `${config.opaBase}?${qs.stringify(params)}`
+}
+
+function mergeDetails (features, details) {
+  const detailsHash = keyBy(details, 'parcel_number')
+  return features.map((feature) => {
+    const detailsMatch = detailsHash[feature.properties.opa_account_num]
+    if (detailsMatch) feature.properties = extend(feature.properties, detailsMatch) // warning: mutation
+    return feature
+  })
 }
