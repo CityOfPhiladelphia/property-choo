@@ -9,10 +9,10 @@ module.exports = (queryType) => (state, prev, send) => {
   }
 
   let display
-  if (state.results.isLoading) {
-    display = 'Loading...'
-  } else if (state.results.matches.features.length > 0) {
+  if (state.results.matches.features.length > 0) {
     display = resultsTable(state.results.matches.features)
+  } else if (state.results.isLoading) {
+    display = 'Loading...'
   } else {
     display = '0 properties found'
   }
@@ -52,14 +52,14 @@ module.exports = (queryType) => (state, prev, send) => {
       </table>`
   }
 
+  function navigate (accountNum) {
+    window.location.hash = '/account/' + accountNum
+  }
+
   function onClickMore (e) {
     query.page = state.results.matches.page + 1
     send('results:fetch', query)
     e.preventDefault()
-  }
-
-  function navigate (accountNum) {
-    window.location.hash = '/account/' + accountNum
   }
 }
 
