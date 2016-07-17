@@ -37,7 +37,10 @@ module.exports = {
     },
     resetQuery: (data, state) => {
       const emptyMatches = module.exports.state.matches
-      return ({ query: data, matches: emptyMatches, isLoading: true })
+      return ({ query: data, matches: emptyMatches })
+    },
+    setLoading: (data, state) => {
+      return { isLoading: true }
     }
   },
   effects: {
@@ -48,13 +51,14 @@ module.exports = {
       if (data.reset) operations.push((callback) => send('results:resetQuery', data, callback))
 
       operations.push(
+        (callback) => send('results:setLoading', callback),
         (callback) => send('results:fetchMatches', data, callback),
         (matches, callback) => send('results:fetchDetails', matches, callback)
       )
 
       // Execute each operation sequentially, passing result into next function
       waterfall(operations, function waterfallDone (err, results) {
-        if (err) console.error(err)
+        if (err) done(err)
         // results consists of 2 properties, { matches, details }
         send('results:receivePage', results, done)
       })
