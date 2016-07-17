@@ -59,8 +59,15 @@ module.exports = {
       // Execute each operation sequentially, passing result into next function
       waterfall(operations, function waterfallDone (err, results) {
         if (err) done(err)
-        // results consists of 2 properties, { matches, details }
-        send('results:receivePage', results, done)
+
+        if (results.matches.total_size === 1) {
+          // If only one result, show property route (doesn't change url)
+          const accountNum = results.matches.features[0].properties.opa_account_num
+          const payload = { location: `/account/${accountNum}` }
+          send('location:setLocation', payload, done)
+        } else {
+          send('results:receivePage', results, done)
+        }
       })
     },
     fetchMatches: (data, state, send, done) => {
