@@ -62,8 +62,8 @@ module.exports = {
 
         if (results.matches.total_size === 1) {
           // If only one result, show property route (doesn't change url)
-          const accountNum = results.matches.features[0].properties.opa_account_num
-          const payload = { location: `/account/${accountNum}` }
+          const account = results.matches.features[0].properties.opa_account_num
+          const payload = { location: `/account/${account}` }
           send('location:setLocation', payload, done)
         } else {
           send('results:receivePage', results, done)
@@ -78,8 +78,8 @@ module.exports = {
       })
     },
     fetchDetails: (matches, state, send, done) => {
-      const accountNumbers = matches.features.map((feature) => feature.properties.opa_account_num)
-      const url = constructDetailsURL(accountNumbers)
+      const accounts = matches.features.map((feature) => feature.properties.opa_account_num)
+      const url = constructDetailsURL(accounts)
       http(url, { json: true }, (err, response) => {
         if (err) done(err)
         else if (response.body.length < 1) done('No details found')
@@ -101,7 +101,7 @@ function constructMatchesURL (type, input, page) {
   return `${config.aisBase}${resource}/${cleanInput}?${qs.stringify(params)}`
 }
 
-function constructDetailsURL (accountNumbers) {
+function constructDetailsURL (accounts) {
   const params = {
     $select: [
       'parcel_number',
@@ -109,7 +109,7 @@ function constructDetailsURL (accountNumbers) {
       'sale_date',
       'sale_price'
     ].join(','),
-    $where: `parcel_number in ("${accountNumbers.join('","')}")`
+    $where: `parcel_number in ("${accounts.join('","')}")`
   }
   return `${config.opaBase}?${qs.stringify(params)}`
 }
