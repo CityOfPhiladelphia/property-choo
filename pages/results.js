@@ -18,12 +18,14 @@ module.exports = (queryType) => (state, prev, send) => {
   }
 
   return html`
-    <div>
-      <h1>${query.input}</h1>
-      ${display}
-      ${state.results.matches.total_size > state.results.matches.features.length
-        ? html`<div><a href="#" class="button icon" onclick=${onClickMore}>See more results</a></div>`
-        : ''}
+    <div class="row">
+      <div class="medium-24 columns">
+        <h1>${query.input}</h1>
+        ${display}
+        ${state.results.matches.total_size > state.results.matches.features.length
+          ? html`<div><a href="#" class="button icon" onclick=${onClickMore}>See more results</a></div>`
+          : ''}
+      </div>
     </div>`
 
   function resultsTable (features) {

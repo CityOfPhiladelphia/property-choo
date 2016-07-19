@@ -1,38 +1,40 @@
 const html = require('choo/html')
 
+const ownership = require('../components/ownership')
+const realEstateTaxes = require('../components/real-estate-taxes')
+const valuationHistory = require('../components/valuation-history')
+const salesDetails = require('../components/sales-details')
+const licensesInspections = require('../components/licenses-inspections')
+const trashRecycling = require('../components/trash-recycling')
+const serviceAreas = require('../components/service-areas')
+const detailsPanel = require('../components/details-panel')
+const opaInquiry = require('../components/opa-inquiry')
+
 module.exports = (state, prev, send) => {
   const account = state.params.account
   const opa = state.property.opa
-  const ais = state.property.ais
+  const ais = state.property.ais.properties
   const homestead = state.property.homestead
 
-  if (account && opa.parcel_number !== account) {
+  if (account && state.property.query !== account) {
     send('property:fetch', account)
   }
 
   return html`
-    <div>
-      <h1>${opa.location} ${opa.unit ? '#' + opa.unit : ''}</h1>
-      <div>
-        <h2>Owner</h2>
-        ${opa.owner_1}${opa.owner_2 ? ', ' + opa.owner_2 : ''}
+    <div class="row">
+      <div class="property-main large-14 columns">
+        ${ownership(opa)}
+        ${realEstateTaxes(opa)}
+        ${valuationHistory()}
+        ${salesDetails(opa)}
+        ${licensesInspections(opa)}
+        ${trashRecycling(ais)}
+        ${serviceAreas(ais)}
       </div>
-      <div>
-        <h2>Service areas</h2>
-        <ul>
-          <li>Elementary School: ${ais.properties.elementary_school}</li>
-          <li>Leaf Collection: ${ais.properties.leaf_collection_area}</li>
-        </ul>
-      </div>
-      <div>
-        <h2>Homestead</h2>
-        ${Object.keys(homestead).length > 0
-          ? html`
-            <ul>
-              <li>Homestead: ${homestead.homestead_exemption > 0 ? 'Yes' : 'No'}</li>
-              <li>Beginning Point: ${homestead.beginning_point}</li>
-            </ul>`
-          : ''}
+      <div class="property-side large-10 columns">
+        <h3 class="hide-for-large alternate divide">Property Details</h3>
+        ${detailsPanel(opa)}
+        ${opaInquiry(opa)}
       </div>
     </div>`
 }
