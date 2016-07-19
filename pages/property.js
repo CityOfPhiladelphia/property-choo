@@ -15,6 +15,7 @@ module.exports = (state, prev, send) => {
   const opa = state.property.opa
   const ais = state.property.ais.properties
   const homestead = state.property.homestead
+  const history = state.property.history
 
   if (account && state.property.query !== account) {
     send('property:fetch', account)
@@ -25,7 +26,7 @@ module.exports = (state, prev, send) => {
       <div class="property-main large-14 columns">
         ${ownership(opa)}
         ${realEstateTaxes(opa)}
-        ${valuationHistory()}
+        ${valuationHistory(history)}
         ${salesDetails(opa)}
         ${licensesInspections(opa)}
         ${trashRecycling(ais)}
@@ -33,7 +34,7 @@ module.exports = (state, prev, send) => {
       </div>
       <div class="property-side large-10 columns">
         <h3 class="hide-for-large alternate divide">Property Details</h3>
-        ${detailsPanel(opa)}
+        ${detailsPanel(opa, homestead)}
         ${opaInquiry(opa)}
       </div>
     </div>`

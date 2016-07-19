@@ -25,7 +25,7 @@ module.exports = (ais) => {
               <strong data-hook="council-district"></strong>
               <h4 class="alternate">Ward</h4>
               <strong data-hook="ward"></strong>
-              <h4 class="alternate">Ward Divisions</h4>
+              <h4 class="alternate">Ward Division</h4>
               <strong data-hook="ward-divisions"></strong>
             </div>
           </div>

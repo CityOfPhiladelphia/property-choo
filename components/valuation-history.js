@@ -19,6 +19,15 @@ module.exports = (history) => {
                 </tr>
               </thead>
               <tbody>
+              ${history.map((row) => html`
+                <tr>
+                  <td>${row.year}</td>
+                  <td>${row.market_value}</td>
+                  <td>${row.taxable_land}</td>
+                  <td>${row.taxable_building}</td>
+                  <td>${row.exempt_land}</td>
+                  <td>${row.exempt_building}</td>
+                </tr>`)}
               </tbody>
             </table>
           </div>

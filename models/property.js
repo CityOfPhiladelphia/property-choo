@@ -36,14 +36,15 @@ module.exports = {
         // Run operations in parallel
         parallel([
           (callback) => send('property:fetchOPA', data, callback),
+          (callback) => send('property:fetchHistory', data, callback),
           (callback) => send('property:fetchAIS', data, callback),
           (callback) => send('property:fetchHomestead', data, callback)
         ],
         function parallelDone (err, results) {
           if (err) done(err)
 
-          const [opa, ais, homestead] = results
-          send('property:receive', { opa, ais, homestead }, done)
+          const [opa, history, ais, homestead] = results
+          send('property:receive', { opa, history, ais, homestead }, done)
         })
       })
     },
@@ -53,6 +54,13 @@ module.exports = {
         if (err) done(err)
         else if (response.body.length < 1) done(`No opa data found for ${data}`)
         else done(null, response.body[0])
+      })
+    },
+    fetchHistory: (data, state, send, done) => {
+      const url = `${config.historyBase}?parcel_number=${data}&$order=year desc`
+      http(url, { json: true }, (err, response) => {
+        if (err) done(err)
+        else done(null, response.body)
       })
     },
     fetchAIS: (data, state, send, done) => {
