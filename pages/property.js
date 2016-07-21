@@ -13,7 +13,7 @@ const opaInquiry = require('../components/opa-inquiry')
 module.exports = (state, prev, send) => {
   const account = state.params.account
   const opa = state.property.opa
-  const ais = state.property.ais.properties
+  const ais = state.property.ais
   const homestead = state.property.homestead
   const history = state.property.history
 
@@ -34,7 +34,7 @@ module.exports = (state, prev, send) => {
       </div>
       <div class="property-side large-10 columns">
         <h3 class="hide-for-large alternate divide">Property Details</h3>
-        ${detailsPanel(opa, homestead)}
+        ${detailsPanel(ais, opa, homestead)}
         ${opaInquiry(opa)}
       </div>
     </div>`

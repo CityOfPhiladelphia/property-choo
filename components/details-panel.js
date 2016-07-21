@@ -1,17 +1,27 @@
 const html = require('choo/html')
 
-module.exports = (opa, homestead) => {
+const map = require('./map')
+
+module.exports = (ais, opa, homestead) => {
   const homesteadValue = homestead.homestead_exemption > 0 ? 'Yes' : 'No'
+  const coords = ais.geometry.coordinates && [ais.geometry.coordinates[1], ais.geometry.coordinates[0]] // geojson is lng,lat
 
   return html`
     <div class="panel mbm">
       <div class="row">
         <div class="columns map-container">
-          <div data-hook="map" class="map"></div>
+          ${map(coords)}
           <div class="text-right">
-            <a data-hook="street-view-url" href="#" class="small-text external" target="_blank">See in Google Street View</a>
+            <a data-hook="street-view-url" href="#" class="small-text external" target="_blank">
+              See in Google Street View
+            </a>
           </div>
-          <div class="map-explainer"><p><small>These maps are created using data that may not represent the precise legal boundaries of each parcel. If you need access to the legal descriptions as they are contained in deeds, please refer to the Department of Records's <a href="https://secure.phila.gov/parcelexplorerauth/">Parcel Explorer</a>.</small></p></div>
+          <div class="map-explainer"><p><small>
+            These maps are created using data that may not represent the precise legal
+            boundaries of each parcel. If you need access to the legal descriptions as
+            they are contained in deeds, please refer to the Department of Records's
+            <a href="https://secure.phila.gov/parcelexplorerauth/">Parcel Explorer</a>.
+          </small></p></div>
         </div>
       </div>
       <div class="row">

@@ -1,5 +1,6 @@
 @import url("//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
 @import url("//cityofphiladelphia.github.io/patterns/dist/1.2.1/css/patterns.css");
+@import url("https://cdn.jsdelivr.net/leaflet/1.0.0-rc.1/leaflet.css");
 
 body {
   /*fixes a random medium screen issue,
