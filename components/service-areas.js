@@ -1,6 +1,8 @@
 const html = require('choo/html')
 
 module.exports = (ais) => {
+  const props = ais.properties
+
   return html`
     <div class="row">
       <div class="columns">
@@ -11,11 +13,11 @@ module.exports = (ais) => {
             <div class="panel mbm">
               <h3>School Catchment</h3>
               <h4 class="alternate">Elementary School</h4>
-              <strong data-hook="elementary-school">${ais.elementary_school}</strong>
+              <strong data-hook="elementary-school">${props.elementary_school}</strong>
               <h4 class="alternate">Middle School</h4>
-              <strong data-hook="middle-school">${ais.middle_school}</strong>
+              <strong data-hook="middle-school">${props.middle_school}</strong>
               <h4 class="alternate">High School</h4>
-              <strong data-hook="high-school">${ais.high_school}</strong>
+              <strong data-hook="high-school">${props.high_school}</strong>
             </div>
           </div>
           <div class="medium-12 columns">
