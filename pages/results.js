@@ -13,6 +13,10 @@ module.exports = (queryType) => (state, prev, send) => {
     display = resultsTable(state.results.matches.features)
   } else if (state.results.isLoading) {
     display = 'Loading...'
+  } else if (state.results.error === 'no_matches') {
+    display = noResultsMsg(query)
+  } else if (state.results.error) {
+    display = 'Error fetching results'
   } else {
     display = '0 properties found'
   }
@@ -52,6 +56,16 @@ module.exports = (queryType) => (state, prev, send) => {
           })}
         </tbody>
       </table>`
+  }
+
+  function noResultsMsg (query) {
+    return html`
+      <div>
+        No results found for <strong>${query.input}</strong>.
+        ${query.type === 'address'
+          ? html`<span><a href="#/block/${query.input}">Search all properties on the block</a>.</span>`
+          : ''}
+      </div>`
   }
 
   function navigate (accountNum) {

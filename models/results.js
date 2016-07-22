@@ -21,7 +21,8 @@ module.exports = {
       type: null,
       input: null
     },
-    isLoading: false
+    isLoading: false,
+    error: null
   },
   reducers: {
     receivePage: (data, state) => {
@@ -35,9 +36,12 @@ module.exports = {
 
       return { matches: matchesCopy, isLoading: false }
     },
+    receiveError: (data, state) => {
+      return { error: data, isLoading: false }
+    },
     resetQuery: (data, state) => {
       const emptyMatches = module.exports.state.matches
-      return ({ query: data, matches: emptyMatches })
+      return { query: data, matches: emptyMatches, error: null }
     },
     setLoading: (data, state) => {
       return { isLoading: true }
@@ -58,7 +62,7 @@ module.exports = {
 
       // Execute each operation sequentially, passing result into next function
       waterfall(operations, function waterfallDone (err, results) {
-        if (err) done(err)
+        if (err) return send('results:receiveError', err, done)
 
         if (results.matches.total_size === 1) {
           // If only one result, show property route (doesn't change url)
@@ -73,7 +77,10 @@ module.exports = {
     fetchMatches: (data, state, send, done) => {
       const url = constructMatchesURL(data.type, data.input, data.page)
       http(url, { json: true }, (err, response) => {
-        if (err) done(err)
+        // See: https://github.com/CityOfPhiladelphia/ais/issues/23
+        const status = response.body.status || response.statusCode
+        if (status === 404) return done('no_matches')
+        else if (err || status !== 200) return done('bad_request')
         else done(null, response.body)
       })
     },
@@ -81,8 +88,8 @@ module.exports = {
       const accounts = matches.features.map((feature) => feature.properties.opa_account_num)
       const url = constructDetailsURL(accounts)
       http(url, { json: true }, (err, response) => {
-        if (err) done(err)
-        else if (response.body.length < 1) done('No details found')
+        if (err) return done('bad_request')
+        else if (response.body.length < 1) return done('no_matches')
         else done(null, { matches: matches, details: response.body })
       })
     }
