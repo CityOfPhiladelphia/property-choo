@@ -11,13 +11,13 @@ body {
 .search {
   z-index:32;
 }
-.search-head .small-text {
+.property-title .small-text {
   margin-top: -20px;
 }
-.search-head {
+.property-title {
   margin-top:0;
 }
-.search-head h1 {
+.property-title h1 {
   margin-top:.5rem;
 }
 .caps {
@@ -45,10 +45,10 @@ body {
   margin-bottom: 0;
 }
 
-.search-head .small-text {
+.property-title .small-text {
   margin-top: -20px;
 }
-.search-head h1 {
+.property-title h1 {
   margin-top:.5rem;
 }
 .search-box-wide {
@@ -249,7 +249,7 @@ body {
   .xtra-lg, .h3{
     font-size:1em;
   }
-  .search-head {
+  .property-title {
     padding: 0px !important;
     margin: 0px !important;
   }

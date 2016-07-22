@@ -24,6 +24,10 @@ module.exports = (state, prev, send) => {
   return html`
     <div class="row">
       <div class="property-main large-14 columns">
+        <div class="property-title">
+          <h1>${opa.location}</h1>
+          <div class="small-text">Philadelphia, PA ${opa.zip_code}</div>
+        </div>
         ${ownership(opa)}
         ${realEstateTaxes(opa)}
         ${valuationHistory(history)}

@@ -15,6 +15,7 @@ app.router((route) => [
   route('/', layout()),
   route('/address/:input', layout(pages.results('address'))),
   route('/block/:input', layout(pages.results('block'))),
+  route('/owner/:input', layout(pages.results('owner'))),
   route('/account/:account', layout(pages.property))
 ])
 

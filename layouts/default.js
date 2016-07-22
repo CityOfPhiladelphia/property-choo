@@ -1,15 +1,15 @@
 const html = require('choo/html')
 
+const siteHeader = require('../components/site-header')
+const pageHeader = require('../components/page-header')
 const search = require('../components/search')
 
 module.exports = (view) => (state, prev, send) => {
   return html`
     <div class="page" id="application">
-      <div class="row">
-        <div class="medium-24 columns">
-          ${search(state, prev, send)}
-        </div>
-      </div>
+      ${siteHeader()}
+      ${pageHeader()}
+      ${search(state, prev, send)}
       ${view ? view(state, prev, send) : ''}
     </div>`
 }
