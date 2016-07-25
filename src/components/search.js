@@ -45,21 +45,25 @@ function createForm (type) {
       return html`
         <form onsubmit=${onsubmit} class="search">
           <input type="text" id="address" placeholder="ex. 1234 Market St">
+          <input type="submit">
         </form>`
     case 'block':
       return html`
         <form onsubmit=${onsubmit} class="search">
           <input type="text" id="block" placeholder="ex. 1200 Market St">
+          <input type="submit">
         </form>`
     case 'owner':
       return html`
         <form onsubmit=${onsubmit} class="search">
           <input type="text" id="owner" placeholder="ex. Benjamin Franklin">
+          <input type="submit">
         </form>`
     case 'account':
       return html`
         <form onsubmit=${onsubmit} class="search">
           <input type="text" id="account" placeholder="ex. 883309000">
+          <input type="submit">
         </form>`
   }
 
