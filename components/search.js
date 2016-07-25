@@ -65,6 +65,11 @@ function createForm (type) {
         <form onsubmit=${onsubmit} class="search">
           <input type="text" id="owner" placeholder="ex. Benjamin Franklin">
         </form>`
+    case 'account':
+      return html`
+        <form onsubmit=${onsubmit} class="search">
+          <input type="text" id="account" placeholder="ex. 883309000">
+        </form>`
   }
 
   function onsubmit (e) {
@@ -73,6 +78,7 @@ function createForm (type) {
     if (formData.address) path = '/address/' + formData.address
     else if (formData.block) path = '/block/' + formData.block
     else if (formData.owner) path = '/owner/' + formData.owner
+    else if (formData.account) path = '/account/' + formData.account
     window.location.hash = path
     e.preventDefault()
   }
