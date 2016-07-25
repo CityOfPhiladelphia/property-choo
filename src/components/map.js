@@ -37,7 +37,6 @@ module.exports = (coords) => {
   function onunload (el) {
     // When page changes, remove event listeners and clear cache
     if (cache.map) cache.map.remove()
-    cache.coords = null
     cache.map = null
   }
 }
