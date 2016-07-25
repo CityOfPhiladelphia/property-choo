@@ -65,10 +65,9 @@ module.exports = {
         if (err) return send('results:receiveError', err, done)
 
         if (results.matches.total_size === 1) {
-          // If only one result, show property route (doesn't change url)
+          // If only one result, redirect to property page
           const account = results.matches.features[0].properties.opa_account_num
-          const payload = { location: `/account/${account}` }
-          send('location:setLocation', payload, done)
+          window.location.hash = `/account/${account}`
         } else {
           send('results:receivePage', results, done)
         }
