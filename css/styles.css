@@ -166,6 +166,39 @@ body {
   width: 100%;
 }
 
+.search-tab, .search-tab:link, .search-tab:visited {
+  width: 100%;
+  padding: 10px;
+  display: inline-block;
+  text-align: center;
+  background-color: #CFCFCF;
+  color: #fff;
+}
+
+.search-tab.active {
+  background-color: #2176d2;
+}
+
+.search-tab-icon {
+  display: inline-block;
+  font-size: 200%;
+}
+
+.search-tab-label {
+  display: block;
+}
+
+.search-area {
+  background-color: #2176d2;
+  padding: 20px 15%;
+  color: #fff;
+  margin-bottom: 25px;
+}
+
+.search-area label {
+  color: #fff;
+}
+
 @media only screen and (max-width: 40em) {
   .front .callout {
     margin:0.625rem 0 1rem 0;

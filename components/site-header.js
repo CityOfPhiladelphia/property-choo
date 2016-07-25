@@ -1,6 +1,6 @@
 const html = require('choo/html')
 
-module.exports = () => {
+module.exports = (currentBreadcrumb) => {
   return html`
     <header data-swiftype-index="false" id="masthead" class="site-header app" role="banner">
       <div class="row site-branding">
@@ -21,9 +21,10 @@ module.exports = () => {
           <div class="row">
             <div data-swiftype-index="false" class="large-24 columns">
               <nav>
-                <ul data-hook="crumbs" class="breadcrumbs">
+                <ul class="breadcrumbs">
                   <li><a href="http://alpha.phila.gov">alpha.phila.gov</a></li>
-                  <li>Property</li>
+                  ${currentBreadcrumb ? html`<li><a href="/">Property</a></li>` : html`<li>Property</li>`}
+                  ${currentBreadcrumb ? html`<li>${currentBreadcrumb}</li>` : ''}
                 </ul>
               </nav>
             </div>

@@ -21,6 +21,7 @@ module.exports = {
       type: null,
       input: null
     },
+    selectedForm: null, // which form is selected address/block/owner
     isLoading: false,
     error: null
   },
@@ -45,6 +46,9 @@ module.exports = {
     },
     setLoading: (data, state) => {
       return { isLoading: true }
+    },
+    setSelectedForm: (data, state) => {
+      return { selectedForm: data }
     }
   },
   effects: {

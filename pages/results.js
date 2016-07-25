@@ -1,7 +1,7 @@
 const html = require('choo/html')
 
-module.exports = (queryType) => (state, prev, send) => {
-  const query = { type: queryType, input: state.params.input }
+module.exports = (state, prev, send) => {
+  const query = state.params
 
   if (query.input && !isSameQuery(query, state.results.query)) {
     query.reset = true
