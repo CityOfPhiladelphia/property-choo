@@ -1,10 +1,8 @@
 const choo = require('choo')
 
 const layout = require('./layouts/default')
-const pages = {
-  results: require('./pages/results'),
-  property: require('./pages/property')
-}
+const resultsPage = require('./pages/results')
+const propertyPage = require('./pages/property')
 
 const app = choo()
 
@@ -13,8 +11,8 @@ app.model(require('./models/property'))
 
 app.router((route) => [
   route('/', layout()),
-  route('/account/:account', layout(pages.property)),
-  route('/:type/:input', layout(pages.results))
+  route('/account/:account', layout(propertyPage)),
+  route('/:type/:input', layout(resultsPage))
 ])
 
 const tree = app.start({ hash: true })

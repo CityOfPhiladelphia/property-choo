@@ -49,7 +49,7 @@ module.exports = {
       })
     },
     fetchOPA: (data, state, send, done) => {
-      const url = `${config.opaBase}?parcel_number=${data}`
+      const url = `${config.opa}?parcel_number=${data}`
       http(url, { json: true }, (err, response) => {
         if (err) done(err)
         else if (response.body.length < 1) done(`No opa data found for ${data}`)
@@ -57,21 +57,21 @@ module.exports = {
       })
     },
     fetchHistory: (data, state, send, done) => {
-      const url = `${config.historyBase}?parcel_number=${data}&$order=year desc`
+      const url = `${config.history}?parcel_number=${data}&$order=year desc`
       http(url, { json: true }, (err, response) => {
         if (err) done(err)
         else done(null, response.body)
       })
     },
     fetchAIS: (data, state, send, done) => {
-      const url = `${config.aisBase}account/${data}?gatekeeperKey=${config.aisKey}`
+      const url = `${config.ais}account/${data}?gatekeeperKey=${config.aisKey}`
       http(url, { json: true }, (err, response) => {
         if (err) done(err)
         else done(null, response.body)
       })
     },
     fetchHomestead: (data, state, send, done) => {
-      const url = `${config.homesteadBase}?account_num=${data}`
+      const url = `${config.homestead}?account_num=${data}`
       http(url, { json: true }, (err, response) => {
         if (err) done(err)
         else if (response.body.length < 1) done(`No homestead found for ${data}`)

@@ -13,9 +13,9 @@ module.exports = (currentBreadcrumb) => {
             <h1 data-hook="app-title" class="page-title">Property</h1>
           </div>
         </div>
-
         <a class="skip-link screen-reader-text" href="#content">Skip to content</a>
       </div>
+
       <div class="row expanded">
         <div class="columns">
           <div class="row">

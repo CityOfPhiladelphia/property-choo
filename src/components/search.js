@@ -20,10 +20,8 @@ module.exports = (state, prev, send) => {
           ${createTab('account', 'Account', 'fa-credit-card')}
         </div>
       </div>
-      <div class="row">
-        <div class="medium-24 columns">
-          <div class="search-area">${createForm(selectedForm)}</div>
-        </div>
+      <div class="row column">
+        <div class="search-area">${createForm(selectedForm)}</div>
       </div>
     </div>`
 

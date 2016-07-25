@@ -108,7 +108,7 @@ function constructMatchesURL (type, input, page) {
   if (page) params.page = page
   const resource = type === 'address' ? 'addresses' : type
   const cleanInput = encodeURIComponent(input)
-  return `${config.aisBase}${resource}/${cleanInput}?${qs.stringify(params)}`
+  return `${config.ais}${resource}/${cleanInput}?${qs.stringify(params)}`
 }
 
 function constructDetailsURL (accounts) {
@@ -121,7 +121,7 @@ function constructDetailsURL (accounts) {
     ].join(','),
     $where: `parcel_number in ("${accounts.join('","')}")`
   }
-  return `${config.opaBase}?${qs.stringify(params)}`
+  return `${config.opa}?${qs.stringify(params)}`
 }
 
 function mergeDetails (features, details) {
