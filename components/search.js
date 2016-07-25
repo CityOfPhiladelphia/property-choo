@@ -8,28 +8,16 @@ module.exports = (state, prev, send) => {
     <div class="row column">
       <div class="row">
         <div class="small-6 columns">
-          <a href="#" class="search-tab ${selectedForm === 'address' ? 'active' : ''}" onclick=${select('address')}>
-            <span class="search-tab-icon"><i class="fa fa-home"></i></span>
-            <span class="search-tab-label">Address</span>
-          </a>
+          ${createTab('address', 'Address', 'fa-home')}
         </div>
         <div class="small-6 columns">
-          <a href="#" class="search-tab ${selectedForm === 'block' ? 'active' : ''}" onclick=${select('block')}>
-            <span class="search-tab-icon"><i class="fa fa-road"></i></span>
-            <span class="search-tab-label">Block</span>
-          </a>
+          ${createTab('block', 'Block', 'fa-road')}
         </div>
         <div class="small-6 columns">
-          <a href="#" class="search-tab ${selectedForm === 'owner' ? 'active' : ''}" onclick=${select('owner')}>
-            <span class="search-tab-icon"><i class="fa fa-user"></i></span>
-            <span class="search-tab-label">Owner</span>
-          </a>
+          ${createTab('owner', 'Owner', 'fa-user')}
         </div>
         <div class="small-6 columns">
-          <a href="#" class="search-tab ${selectedForm === 'account' ? 'active' : ''}" onclick=${select('account')}>
-            <span class="search-tab-icon"><i class="fa fa-credit-card"></i></span>
-            <span class="search-tab-label">Account</span>
-          </a>
+          ${createTab('account', 'Account', 'fa-credit-card')}
         </div>
       </div>
       <div class="row">
@@ -39,8 +27,14 @@ module.exports = (state, prev, send) => {
       </div>
     </div>`
 
-  function select (type) {
-    return function (e) {
+  function createTab (type, label, icon) {
+    return html`
+      <a href="#" class="search-tab ${selectedForm === type ? 'active' : ''}" onclick=${onclick}>
+        <span class="search-tab-icon"><i class="fa ${icon}"></i></span>
+        <span class="search-tab-label">${label}</span>
+      </a>`
+
+    function onclick (e) {
       send('results:setSelectedForm', type)
       e.preventDefault()
     }
@@ -53,7 +47,6 @@ function createForm (type) {
       return html`
         <form onsubmit=${onsubmit} class="search">
           <input type="text" id="address" placeholder="ex. 1234 Market St">
-          <input type="submit">
         </form>`
     case 'block':
       return html`
