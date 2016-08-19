@@ -1,7 +1,7 @@
 const http = require('choo/http')
 const qs = require('query-string')
 const waterfall = require('run-waterfall')
-const keyBy = require('lodash/keyby')
+const keyBy = require('lodash/keyBy')
 const extend = require('xtend')
 
 const config = require('../config')

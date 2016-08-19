@@ -5,7 +5,7 @@
  */
 const html = require('choo/html')
 const L = require('leaflet')
-const isEqual = require('lodash/isequal')
+const isEqual = require('lodash/isEqual')
 const esri = require('esri-leaflet')
 L.Icon.Default.imagePath = '/images' // is there a better solution?
 
