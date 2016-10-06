@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "budo src/index.js:dist/bundle.js --live"
+    "start": "budo src/index.js:dist/bundle.js --live",
+    "build": "browserify src/index.js -o dist/bundle.js"
   },
   "author": "City of Philadelphia",
   "license": "MIT",
@@ -20,6 +21,7 @@
     "xtend": "^4.0.1"
   },
   "devDependencies": {
-    "static": "^2.0.0"
+    "browserify": "^13.1.0",
+    "budo": "^9.2.1"
   }
 }
