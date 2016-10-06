@@ -3,6 +3,7 @@ const html = require('choo/html')
 const siteHeader = require('../components/site-header')
 const pageHeader = require('../components/page-header')
 const search = require('../components/search')
+const footer = require('../components/footer')
 
 module.exports = (view) => (state, prev, send) => {
   let currentBreadcrumb
@@ -15,5 +16,6 @@ module.exports = (view) => (state, prev, send) => {
       ${pageHeader()}
       ${search(state, prev, send)}
       ${view ? view(state, prev, send) : ''}
+      ${footer()}
     </div>`
 }
