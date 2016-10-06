@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "budo src/index.js:dist/bundle.js --live",
-    "build": "browserify src/index.js -o dist/bundle.js"
+    "build": "browserify src/index.js -o dist/bundle.js",
+    "deploy": "npm run build && surge . -d property-choo.surge.sh"
   },
   "author": "City of Philadelphia",
   "license": "MIT",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "browserify": "^13.1.0",
-    "budo": "^9.2.1"
+    "budo": "^9.2.1",
+    "surge": "^0.18.0"
   }
 }
