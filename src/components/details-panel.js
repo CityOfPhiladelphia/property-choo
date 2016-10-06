@@ -2,8 +2,8 @@ const html = require('choo/html')
 
 const map = require('./map')
 
-module.exports = (ais, opa, homestead) => {
-  const homesteadValue = homestead.homestead_exemption > 0 ? 'Yes' : 'No'
+module.exports = (ais, opa) => {
+  const homesteadValue = opa.homestead_exemption > 0 ? 'Yes' : 'No'
   const coords = ais.geometry.coordinates && [ais.geometry.coordinates[1], ais.geometry.coordinates[0]] // geojson is lng,lat
 
   return html`
@@ -58,7 +58,7 @@ module.exports = (ais, opa, homestead) => {
         <div class="small-24 columns">
           <h4 class="alternate">Beginning Point</h4>
           <strong data-hook="beginning-point">
-            ${homestead.beginning_point}
+            ${opa.beginning_point}
           </strong>
         </div>
       </div>

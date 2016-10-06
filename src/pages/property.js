@@ -14,7 +14,6 @@ module.exports = (state, prev, send) => {
   const account = state.params.account
   const opa = state.property.opa
   const ais = state.property.ais
-  const homestead = state.property.homestead
   const history = state.property.history
 
   if (account && state.property.query !== account) {
@@ -49,7 +48,7 @@ module.exports = (state, prev, send) => {
         </div>
         <div class="property-side large-10 columns">
           <h3 class="hide-for-large alternate divide">Property Details</h3>
-          ${detailsPanel(ais, opa, homestead)}
+          ${detailsPanel(ais, opa)}
           ${opaInquiry(opa)}
         </div>
       </div>`
