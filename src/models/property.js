@@ -21,6 +21,9 @@ module.exports = {
     receive: (data, state) => {
       return extend(data, { isLoading: false })
     },
+    receiveError: (data, state) => {
+      return { error: data, isLoading: false }
+    },
     resetQuery: (data, state) => {
       const defaultState = module.exports.state
       return extend(defaultState, {
@@ -41,7 +44,7 @@ module.exports = {
           (callback) => send('property:fetchHomestead', data, callback)
         ],
         function parallelDone (err, results) {
-          if (err) done(err)
+          if (err) return send('property:receiveError', err, done)
 
           const [opa, history, ais, homestead] = results
           send('property:receive', { opa, history, ais, homestead }, done)
@@ -51,31 +54,34 @@ module.exports = {
     fetchOPA: (data, state, send, done) => {
       const url = `${config.opa}?parcel_number=${data}`
       http(url, { json: true }, (err, response) => {
-        if (err) done(err)
-        else if (response.body.length < 1) done(`No opa data found for ${data}`)
-        else done(null, response.body[0])
+        if (err) return done('bad_request')
+        else if (response.body.length < 1) return done('no_matches')
+        done(null, response.body[0])
       })
     },
     fetchHistory: (data, state, send, done) => {
       const url = `${config.history}?parcel_number=${data}&$order=year desc`
       http(url, { json: true }, (err, response) => {
-        if (err) done(err)
-        else done(null, response.body)
+        if (err) console.error('history: bad_request')
+        else if (response.body.length < 1) console.error('history: no_matches')
+        done(null, response.body)
       })
     },
     fetchAIS: (data, state, send, done) => {
       const url = `${config.ais}account/${data}?gatekeeperKey=${config.aisKey}`
       http(url, { json: true }, (err, response) => {
-        if (err) done(err)
-        else done(null, response.body)
+        const status = response.body.status || response.statusCode
+        if (status === 404) return done('no_matches')
+        else if (err || status !== 200) return done('bad_request')
+        done(null, response.body)
       })
     },
     fetchHomestead: (data, state, send, done) => {
       const url = `${config.homestead}?account_num=${data}`
       http(url, { json: true }, (err, response) => {
-        if (err) done(err)
-        else if (response.body.length < 1) done(`No homestead found for ${data}`)
-        else done(null, response.body[0])
+        if (err) console.error('homestead: bad_request')
+        else if (response.body.length < 1) console.error('homestead: no_matches')
+        done(null, response.body[0])
       })
     }
   }
