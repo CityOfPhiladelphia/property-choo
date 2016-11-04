@@ -101,7 +101,6 @@ module.exports = {
 
 function constructMatchesURL (type, input, page) {
   const params = {
-    gatekeeperKey: config.aisKey,
     include_units: null,
     opa_only: null
   }

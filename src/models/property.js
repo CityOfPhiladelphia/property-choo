@@ -66,7 +66,7 @@ module.exports = {
       })
     },
     fetchAIS: (data, state, send, done) => {
-      const url = `${config.ais}account/${data}?gatekeeperKey=${config.aisKey}`
+      const url = `${config.ais}account/${data}`
       http(url, { json: true }, (err, response) => {
         const status = response.body.status || response.statusCode
         if (status === 404) return done('no_matches')
