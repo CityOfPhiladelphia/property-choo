@@ -9,6 +9,7 @@ module.exports = {
   state: {
     opa: {},
     history: [],
+    permits: [],
     ais: {
       properties: {},
       geometry: {}
@@ -45,7 +46,13 @@ module.exports = {
           if (err) return send('property:receiveError', err, done)
 
           const [opa, history, ais] = results
-          send('property:receive', { opa, history, ais }, done)
+          const liKey = ais.properties.li_address_key
+          // Permit query depends on address key from AIS response
+          send('property:fetchPermits', liKey, (err, permits) => {
+            if (err) return send('property:receiveError', err, done)
+
+            send('property:receive', { opa, history, ais, permits }, done)
+          })
         })
       })
     },
@@ -71,6 +78,13 @@ module.exports = {
         const status = response.body.status || response.statusCode
         if (status === 404) return done('no_matches')
         else if (err || status !== 200) return done('bad_request')
+        done(null, response.body)
+      })
+    },
+    fetchPermits: (liKey, state, send, done) => {
+      const url = `${config.permits}?addresskey=${liKey}`
+      http(url, { json: true }, (err, response) => {
+        if (err) return done('permits: bad_request')
         done(null, response.body)
       })
     }

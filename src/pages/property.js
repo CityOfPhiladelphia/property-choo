@@ -15,6 +15,7 @@ module.exports = (state, prev, send) => {
   const opa = state.property.opa
   const ais = state.property.ais
   const history = state.property.history
+  const permits = state.property.permits
 
   if (account && state.property.query !== account) {
     send('property:fetch', account)
@@ -42,7 +43,7 @@ module.exports = (state, prev, send) => {
           ${realEstateTaxes(opa)}
           ${valuationHistory(history)}
           ${salesDetails(opa)}
-          ${licensesInspections(opa)}
+          ${licensesInspections(permits)}
           ${trashRecycling(ais)}
           ${serviceAreas(ais)}
         </div>
