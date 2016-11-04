@@ -11,6 +11,7 @@
   "author": "City of Philadelphia",
   "license": "MIT",
   "dependencies": {
+    "cache-element": "^1.1.1",
     "choo": "^3.0.2",
     "esri-leaflet": "^2.0.1",
     "get-form-data": "^1.2.5",

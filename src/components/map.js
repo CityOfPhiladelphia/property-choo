@@ -5,43 +5,40 @@
  */
 const html = require('choo/html')
 const L = require('leaflet')
-const isEqual = require('lodash/isEqual')
 const esri = require('esri-leaflet')
 L.Icon.Default.imagePath = '/images' // is there a better solution?
 
 const config = require('../config')
 
-const cache = {
-  coords: null,
-  map: null,
-  el: null
-}
-module.exports = (coords) => {
-  if (coords) {
-    // If new coords or el hasn't been created already, create one
-    // otherwise, cached el will be returned
-    if (!isEqual(coords, cache.coords) || !cache.el) {
-      cache.coords = coords
-      if (cache.map) cache.map.remove()
-      cache.el = html`<div class="map" id="map" onload=${onload} onunload=${onunload}></div>`
-    }
-    return cache.el
-  } else {
-    return html`<div class="map"></div>`
+module.exports = (handleUpdates) => {
+  let coords, map
+
+  console.log('map component called')
+
+  handleUpdates(onUpdate)
+
+  return html`<div class="map" id="map" onload=${onload} onunload=${onunload}></div>`
+
+  function onUpdate (newCoords) {
+    console.log('onUpdate called', newCoords)
+    coords = newCoords
+    if (map) map.setView(coords, 18)
   }
 
   function onload (el) {
-    cache.map = initMap('map', coords)
+    console.log('onload called', coords)
+    map = initMap('map', coords)
   }
 
   function onunload (el) {
     // When page changes, remove event listeners and clear cache
-    if (cache.map) cache.map.remove()
-    cache.map = null
+    if (map) map.remove()
+    map = null
   }
 }
 
 function initMap (el, coords) {
+  console.log('initialising map', coords)
   const map = L.map(el).setView(coords, 18)
   esri.tiledMapLayer({
     url: config.basemap,

@@ -1,6 +1,8 @@
 const html = require('choo/html')
+const widget = require('cache-element/widget')
 
 const map = require('./map')
+const mapWidget = widget(map)
 
 module.exports = (ais, opa) => {
   const homesteadValue = opa.homestead_exemption > 0 ? 'Yes' : 'No'
@@ -10,7 +12,7 @@ module.exports = (ais, opa) => {
     <div class="panel mbm">
       <div class="row">
         <div class="columns map-container">
-          ${map(coords)}
+          ${mapWidget(coords)}
           <div class="text-right">
             <a data-hook="street-view-url" href="#" class="small-text external" target="_blank">
               See in Google Street View
